@@ -1,0 +1,32 @@
+name: Static Analysis
+
+on:
+  # Run for pull requests (excluding drafts)
+  pull_request:
+    types: [ opened, reopened]
+    # Run on branches develop and main
+    branches: 
+      - main
+      - develop
+  push:
+    branches:
+      - main
+
+jobs:
+  # Job to run SonarQube analysis
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Disabling shallow clone improves report relevancy
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            sonar.organization=kvikktrip
+            sonar.projectKey=Matejmasar_KvikkTrip-Backend
