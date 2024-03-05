@@ -28,5 +28,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            sonar.organization=kvikktrip
-            sonar.projectKey=Matejmasar_KvikkTrip-Backend
+            -Dsonar.organization=kvikktrip
+            -Dsonar.projectKey=Matejmasar_KvikkTrip-Backend
