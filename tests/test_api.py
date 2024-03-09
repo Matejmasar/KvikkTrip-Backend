@@ -14,18 +14,17 @@ def client():
     with app.app_context():
         db.create_all()
 
-
 def test_deploying(client):
     with app.app_context():
         response = client.get("/")
+        print(response.data)
         assert b"Kvikk Trip Backend" in response.data
-
 
 def test_getting_locations(client):
     with app.app_context():
         response = client.get("/location")
+        print(response.data)
         assert b"Voss" in response.data
-
 
 def test_posting_location(client):
     with app.app_context():
