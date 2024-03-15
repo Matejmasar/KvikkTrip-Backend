@@ -48,7 +48,6 @@ class Users(db.Model):
         db.session.commit()
         return True
     
-    @classmethod
     def serialize(self):
        {
             'id': self.id_user,
