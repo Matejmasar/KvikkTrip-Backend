@@ -1,0 +1,14 @@
+tests/__pycache__/test_api.cpython-39-pytest-7.0.1.pyc
+tests/__pycache__/__init__.cpython-39.pyc
+src/__pycache__/locations.cpython-39.pyc
+src/__pycache__/__init__.cpython-39.pyc
+__pycache__/app.cpython-39.pyc
+__pycache__/database.cpython-39.pyc
+__pycache__/history.cpython-39.pyc
+__pycache__/location.cpython-39.pyc
+__pycache__/locations.cpython-39.pyc
+__pycache__/preferences.cpython-39.pyc
+__pycache__/tags_locations.cpython-39.pyc
+__pycache__/tags.cpython-39.pyc
+__pycache__/users.cpython-39.pyc
+*__pycache__*
