@@ -42,7 +42,6 @@ class Preferences(db.Model):
         db.session.commit()
         return True
     
-    @classmethod
     def serialize(self):
         return {
             'id_weight': self.id_weight,
