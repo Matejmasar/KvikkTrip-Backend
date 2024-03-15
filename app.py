@@ -9,13 +9,21 @@ from src.tags import Tags
 from src.users import Users
 from src.history import History
 from src.preferences import Preferences
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_user, login_required
 
 app = Flask(__name__)
 app.debug = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://admin:kvikktrip_password@dpg-cnevjqi1hbls738raqa0-a.frankfurt-postgres.render.com/kvikktrip'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = '1234'
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
 
 with app.app_context():
     db.session.execute(text('CREATE EXTENSION IF NOT EXISTS postgis;'))
@@ -34,13 +42,48 @@ def index():
     return "Kvikk Trip Backend"
 
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.get_user_by_id(user_id)
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.form.get('email')
+    name = request.form.get('name')
+    username = request.form.get('username')
+    password = request.form.get('password')
+    hashp = generate_password_hash(password, method="pbkdf2:sha256")
+
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        return "Email already exists"
+
+    new_user = Users.create_user(name, email, username, hashp)
+    return "User created"
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form.get('email')
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = Users.query.filter_by(email=email).first()
+    correct = check_password_hash(user.password, password)
+
+    if not user or not correct:
+        return "Wrong credentials"
+    else:
+        login_user(user, remember=True)
+        return "Logged in"
+
 ''' 
 CRUD API for Location table
 '''
+
 @app.route('/location', methods=['GET'])
-@app.route('/locations', methods=['GET'])
+@login_required
 def location_get_all():
     print('rashaad')
+    a = Locations.query.all()
     all_locations = Locations.get_all_locations()
     print(all_locations)
     if all_locations is None or len(all_locations) == 0:

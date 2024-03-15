@@ -20,7 +20,8 @@ class Locations(db.Model):
 
     id_location = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
-    gps = db.Column(Geometry(geometry_type='POINT', srid=4326))
+    gps = db.Column(db.String)
+    #gps = db.Column(Geometry(geometry_type='POINT', srid=4326))
     #gps = db.Column(LatLngType)
     #st_asewkb(CAST (some_point AS geometry))
     #cast(st_as)
