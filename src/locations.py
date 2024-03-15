@@ -2,7 +2,7 @@
 from geoalchemy2 import Geometry, Geography
 from geoalchemy2.elements import WKBElement
 from sqlalchemy.orm import relationship
-from sqlalchemy import func
+from sqlalchemy import func, Column
 from database import db
 from src.gps_type import LatLngType
 from src.tags_locations import tags_locations
@@ -22,11 +22,16 @@ class Locations(db.Model):
     name = db.Column(db.String(256))
     gps = db.Column(Geometry(geometry_type='POINT', srid=4326))
     #gps = db.Column(LatLngType)
+    #st_asewkb(CAST (some_point AS geometry))
+    #cast(st_as)
+    #gps = db.Column(Geometry('POINT'))
     tags = db.relationship('Tags', secondary=tags_locations, back_populates='locations')
 
     @classmethod
     def get_all_locations(cls):
-        return cls.query.all()
+        #return cls.query().all()
+        print(cls.query.all())
+        #cls.query(Locations, func.ST_AsEWKB(Locations.gps)).all()
     
     @classmethod
     def get_location_by_id(cls, id_location):
