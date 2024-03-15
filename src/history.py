@@ -43,7 +43,6 @@ class History(db.Model):
         db.session.commit()
         return True
     
-    @classmethod
     def serialize(self):
         return {
             'id_event': self.id_event,

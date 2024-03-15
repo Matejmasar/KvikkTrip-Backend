@@ -16,6 +16,10 @@ class Tags(db.Model):
         return cls.query.all()
     
     @classmethod
+    def get_tab_by_id(cls, id_tags):
+        return db.session.get(cls, id_tags)
+    
+    @classmethod
     def add_tag(cls, label):
         new_tag = cls(label=label)
         db.session.add(new_tag)
@@ -46,7 +50,6 @@ class Tags(db.Model):
     def does_exist(cls, label):
         tag = cls.query.filter_by(label=label).first()
     
-    @classmethod
     def serialize(self):
         return {
             'id_tag': self.id_tag,

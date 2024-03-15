@@ -40,20 +40,17 @@ CRUD API for Location table
 @app.route('/location', methods=['GET'])
 @app.route('/locations', methods=['GET'])
 def location_get_all():
-    print('rashaad')
     all_locations = Locations.get_all_locations()
-    print(all_locations)
     if all_locations is None or len(all_locations) == 0:
         return "There are no locations in the database"
     else:
-        
         return jsonify([location.serialize() for location in all_locations])
 
 @app.route('/location/<int:id_location>', methods=['GET'])
 def location_get(id_location):
     the_location = Locations.get_location_by_id(id_location)
     if the_location is None:
-        return "This location is not registered"
+        return jsonify({"message":"The location is not registered"}), 400
     else:
         return jsonify(the_location.serialize()), 200
 
@@ -66,9 +63,13 @@ def location_post():
 
     if not name or not latitude or not longitude:
         return jsonify({'error': 'Missing required fields'}), 400
-
+    
     new_location = Locations.add_location(name, latitude, longitude)
-    return jsonify(new_location.serialize()), 201
+    if new_location:
+        return jsonify(new_location), 201
+    else:
+        # Handle the case where the location could not be added
+        return jsonify({'error': 'Unable to create the location'}), 500
 
 @app.route('/location/<int:id_location>', methods=[ 'PUT'])
 def location_put(id_location):
@@ -86,7 +87,7 @@ def location_put(id_location):
 @app.route('/location/<int:id_location>', methods=[ 'DELETE'])
 def location_delete(id_location):
     if Locations.delete_location(id_location):
-        return jsonify({'message': 'Location deleted successfully'})
+        return jsonify({'message': 'Location deleted successfully'}), 200
     else:
         return jsonify({'error': 'Location not found'}), 404
     
@@ -235,6 +236,7 @@ def event_delete(id_event):
  CRUD API for Tags table
 '''
 @app.route('/tags', methods=['GET'])
+@app.route('/tag', methods=['GET'])
 def get_all_tags():
     all_tags = Tags.get_all_tags()
     if all_tags is None or len(all_tags) == 0:
@@ -244,8 +246,8 @@ def get_all_tags():
 
 @app.route('/tag/<int:id_tag>', methods=['GET'])
 def tag_get(id_tag):
-    tags = Tags.get_tab_by_id(id_tag)
-    return jsonify([tag.serialize() for tag in tags])
+    tag = Tags.get_tab_by_id(id_tag)
+    return jsonify([tag.serialize()])
 
 @app.route('/tag', methods=['POST'])
 @app.route('/tags', methods=['POST'])
