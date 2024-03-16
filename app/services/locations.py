@@ -1,6 +1,6 @@
 
 from database import db
-from src.tags_locations import tags_locations
+from app.services.tags_locations import tags_locations
 
 
 ''' Implements the Locations table functionality
